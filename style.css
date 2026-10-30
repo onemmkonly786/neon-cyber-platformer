@@ -1,0 +1,27 @@
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: radial-gradient(ellipse at top, #111b35 0%, #070a12 65%);
+  color: #00f3ff; font-family: 'Courier New', monospace;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100vh; margin: 0; padding: 14px; overflow-x: hidden;
+}
+#game-container {
+  width: min(100%, 840px); border: 2px solid #00ddeb;
+  box-shadow: 0 0 25px #00ddeb55, inset 0 0 18px #00ddeb18;
+  background: #05070c; border-radius: 10px; padding: 10px;
+}
+#ui-header { display:flex; justify-content:space-between; gap:8px; font-size:clamp(12px, 2.5vw, 18px);
+  font-weight:bold; padding:5px 8px 12px; letter-spacing:1px; text-shadow:0 0 8px #00f3ff; }
+canvas { display:block; width:100%; height:auto; background:#070a14; border-radius:4px; touch-action:none; }
+#message { min-height: 24px; text-align:center; padding:8px 4px 2px; color:#ff4df0; font-size:clamp(11px,2.3vw,14px); }
+.help { text-align:center; color:#8aa4bd; font-size:12px; margin:7px 0 2px; }
+.controls { display:none; justify-content:center; align-items:center; gap:18px; padding:8px 0 2px; }
+.controls button { min-width:62px; min-height:48px; border:1px solid #00eaff; border-radius:8px; color:#00f3ff;
+  background:#0b1930; font: bold 14px monospace; box-shadow:0 0 10px #00ddeb44; touch-action:none; }
+.controls button:active { background:#16415a; }
+@media (pointer:coarse), (max-width:700px) {
+  .controls { display:flex; }
+  .help { font-size:10px; }
+  body { justify-content:flex-start; padding:8px; }
+}

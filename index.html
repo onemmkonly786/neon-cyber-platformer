@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d19">
+  <title>Neon Cyber Platformer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="game-container">
+    <header id="ui-header" aria-live="polite">
+      <div class="stat">LEVEL: <span id="ui-level">1</span></div>
+      <div class="stat">ORBS: <span id="ui-score">0</span>/<span id="ui-target">5</span></div>
+      <div class="stat">LIVES: <span id="ui-lives">3</span></div>
+    </header>
+    <canvas id="gameCanvas" width="800" height="500" aria-label="Neon platform game"></canvas>
+    <div id="message" role="status">COLLECT ALL ORBS, THEN REACH THE PORTAL</div>
+    <div class="controls" aria-label="Touch controls">
+      <button id="leftBtn" aria-label="Move left">◀</button>
+      <button id="rightBtn" aria-label="Move right">▶</button>
+      <button id="jumpBtn" aria-label="Jump">JUMP</button>
+    </div>
+    <p class="help">Move: A/D or ←/→ &nbsp; Jump: W / ↑ / SPACE &nbsp; Restart: R</p>
+  </main>
+  <script src="audio.js"></script>
+  <script src="particles.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
