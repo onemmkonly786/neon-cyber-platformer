@@ -29,11 +29,17 @@
         <h1>NEON <em>CYBER</em><br>UPRISING</h1>
         <p>Leap through 10 dangerous sectors, gather energy and credits, unlock abilities, and take down the corrupted CORE.</p>
         <button id="playBtn" class="primary">START MISSION</button>
-        <div class="button-row"><button id="shopBtn">UPGRADE LAB</button><button id="howBtn">HOW TO PLAY</button></div>
+        <div class="button-row"><button id="levelSelectBtn">CHOOSE LEVEL</button><button id="shopBtn">UPGRADE LAB</button><button id="howBtn">HOW TO PLAY</button></div>
         <p class="bestline">PERSONAL BEST <b id="menuBest">0</b> <span>·</span> <b id="menuCoins">0</b> CREDITS</p>
       </div>
     </section>
-    <section id="pauseScreen" class="overlay hidden"><div class="panel">
+    <section id="levelSelectScreen" class="overlay hidden"><div class="panel level-panel">
+      <small>JUMP INTO ANY SECTOR</small><h2>CHOOSE LEVEL</h2>
+      <p>All 10 levels are available. Pick any level, including the final boss!</p>
+      <div id="levelButtons" class="level-grid"></div>
+      <button id="levelSelectBackBtn" class="primary">BACK TO MENU</button>
+    </div></section>
+  <section id="pauseScreen" class="overlay hidden"><div class="panel">
       <small>MISSION SUSPENDED</small><h2>PAUSED</h2>
       <button id="resumeBtn" class="primary">RESUME</button>
       <div class="button-row"><button id="restartBtn">RESTART SECTOR</button><button id="quitBtn">MAIN MENU</button></div>
