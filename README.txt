@@ -1,43 +1,33 @@
-NEON CYBER: UPRISING — UPGRADED GAME
+NEON CYBER: UPRISING — MERGED CONTROLS UPDATE
 
-FILES
-- index.html
-- style.css
-- game.js
-- audio.js
-- particles.js
+This package keeps the full upgraded game and restores the working Pulse and Shield controls.
 
-FEATURES
-- 10 sectors with escalating hazards and a final CORE boss.
-- Double jump (unlock in Upgrade Lab).
-- Phase dash, Nova Pulse stun attack, and temporary Ion Shield.
-- Energy meter and cooldowns.
-- Credits, collectible coins, and permanent upgrades saved locally.
-- Alternate suit colors.
-- Checkpoint in each sector.
-- Drone enemies, spike hazards, and turret projectiles.
-- Animated neon city, particles, sound effects, pause menu, mobile controls.
-- Personal best and upgrade data saved in this browser.
+PRESERVED UPGRADED FEATURES
+- 10 sectors with increasing difficulty and a 5-hit CORE boss
+- Credits and collectible coins
+- Upgrade Lab: double jump, phase dash, pulse radius, shield duration, suit colors
+- Energy meter and dash/pulse/shield energy costs
+- Checkpoints, turrets, enemy projectiles, drones, hazards
+- Saved upgrades and best score in local browser storage
+- Mobile touch controls and desktop keyboard controls
 
 CONTROLS
-Desktop:
-- Move: A/D or Left/Right
-- Jump: W, Up, or Space
+- Move: A/D or Left/Right arrows
+- Jump: W, Up arrow, or Space
 - Dash: Shift
-- Pulse: X
-- Shield: C
+- Pulse: E (X also works)
+- Shield: Q (C also works)
 - Pause: P or Escape
+- Mobile: use the on-screen buttons
 
-Mobile:
-- Use Left/Right, Dash, Jump, Pulse, and Pause buttons.
+PULSE stuns nearby drones, clears nearby projectiles, and damages the CORE boss when close enough.
+SHIELD temporarily protects the player and consumes energy.
 
-RUN LOCALLY
-Keep all five .html/.css/.js files in the same folder and open index.html in a modern browser.
-For best results, use a simple local web server or publish the folder with GitHub Pages.
+INSTALL ON GITHUB PAGES
+1. Extract this ZIP.
+2. Open your GitHub repository and upload/replace all five files together:
+   index.html, style.css, game.js, audio.js, particles.js
+3. Commit the changes to the main branch.
+4. Wait for GitHub Pages to deploy, then hard-refresh the game (Ctrl+Shift+R).
 
-GITHUB PAGES UPDATE
-Upload and replace index.html, style.css, game.js, audio.js, and particles.js in the repository root, then commit the changes. Keep GitHub Pages pointed at the main branch and /(root).
-
-NOTES
-- Credits, upgrades, and best score are stored in localStorage on the current browser/device.
-- This is a single-player browser game; there is no online leaderboard or cloud save.
+Your saved upgrades remain in the same browser if the localStorage key is unchanged. This package keeps the existing key.
