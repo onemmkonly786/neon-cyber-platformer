@@ -36,3 +36,7 @@ Your saved upgrades remain in the same browser if the localStorage key is unchan
 WEAPON UPDATE
 - Nova Pulse (E) now removes nearby normal enemies (drones and turrets) permanently for the rest of that sector. Enemies destroyed this way do not return until you restart the sector.
 - Plasma Blaster can be purchased in the Upgrade Lab. Press F to fire forward; upgraded levels improve projectile speed and firing rate. It can damage the CORE only while the boss is exposed.
+
+
+LATEST UPDATE — NOVA PULSE (E)
+Press E (or X) to activate Nova Pulse. It now permanently clears nearby spike hazards as well as normal drones and turrets for the rest of the current level. The level rebuilds its hazards when you restart or enter it again. The final boss is not instantly destroyed.
