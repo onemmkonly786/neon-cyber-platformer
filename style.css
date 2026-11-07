@@ -28,3 +28,7 @@ footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-
 
 .suit-heading{color:#9ab2ca;font:700 11px monospace;letter-spacing:2px;margin:14px 0 8px}.suit-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:8px 0 16px}.suit-choice{margin:0;padding:9px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:9px;border-color:#31516d;color:#d8efff}.suit-choice.selected{border-color:var(--suit-color);box-shadow:0 0 12px color-mix(in srgb,var(--suit-color),transparent 55%);color:var(--suit-color)}.suit-choice:disabled{opacity:.42}.suit-swatch{width:19px;height:24px;border-radius:5px 5px 3px 3px;background:var(--suit-color);box-shadow:0 0 12px var(--suit-color)}.suit-choice small{font:8px monospace;color:#9ab2ca}
 @media(max-width:420px){.suit-picker{grid-template-columns:repeat(4,1fr)}.suit-choice{font-size:8px;padding:8px 2px}}
+/* Mega upgrade: seeker drones, overdrive and compact mobile controls */
+.touch{flex-wrap:wrap;padding:0 5px}.touch button{min-width:42px}.touch button#boostBtn{border-color:#ffe66d;color:#ffe66d}
+#musicBtn{border-color:#7cff9b;color:#7cff9b}
+@media(max-width:700px),(pointer:coarse){.touch{max-width:100%;row-gap:4px}.touch button{min-width:36px;min-height:40px;font-size:8px}.stage{margin-bottom:3px}}

@@ -1,20 +1,29 @@
-NEON CYBER: UPRISING — 40 LEVEL UPDATE
+NEON CYBER: UPRISING — MEGA UPGRADE
 
-- 40 sectors across four visual world themes.
-- Four boss battles at levels 10, 20, 30 and 40.
-- Each boss has its own name, health, attack pattern and visual color:
-  10 Iron Sentinel — aimed hunter shot.
-  20 Storm Warden — triple burst.
-  30 Void Leviathan — radial void ring.
-  40 Core Titan — five-shot barrage.
-- Defeating each boss unlocks a permanent weapon:
-  Level 10: Plasma Cannon (F)
-  Level 20: Scatter Cannon (F)
-  Level 30: Rocket Launcher (F)
-  Level 40: Nova Beam (F)
-- Press Z to cycle through unlocked weapons.
-- Existing suits, upgrades, coins, E Nova Pulse, mobile controls and saves are retained.
-- Weapon unlocks are stored in the existing local save on this device.
+This update is built on the existing Neon Cyber Platformer 40-level / four-boss project. It is NOT the separate MOHD-MURAD-KHAN game.
+
+Files required together:
+- index.html
+- style.css
+- game.js
+- audio.js
+- particles.js
+
+New additions in this update:
+- Seeker drones begin appearing in later sectors. They track the player and can be destroyed by weapons or Nova Pulse.
+- Overdrive ability (G on keyboard / BOOST on touch): temporary movement speed boost. Upgrade its duration and energy recovery in the Upgrade Lab.
+- Bosses enter an enraged phase below half health and attack faster.
+- Synthesized offline background music with a MUSIC ON/OFF toggle.
+- Mobile touch controls wrap to fit narrow screens.
+
+Existing game content preserved:
+- 40 sectors across four world themes
+- Bosses at levels 10, 20, 30 and 40
+- Four boss-earned weapons, weapon cycling, Nova Pulse, shield, dash and double jump
+- Upgrade Lab, suits, credits, checkpoints, hazards, drones, turrets, local save data
 
 PUBLISHING:
-Extract all files and replace the files in your GitHub Pages repository, then commit the changes.
+Extract the ZIP and upload/replace ALL five game files in your existing neon-cyber-platformer GitHub repository. Keep the filenames exactly as shown. Do not upload these files to the MOHD-MURAD-KHAN project.
+
+TESTING NOTE:
+JavaScript syntax checks passed. The game has not been fully play-tested in a real browser or on a physical phone in this session.

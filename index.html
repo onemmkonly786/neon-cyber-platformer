@@ -1,166 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>MOHD-MURAD-KHAN</title>
-<style>
-:root{--ink:#f4f7ff;--muted:#aebbd5;--panel:rgba(9,15,34,.88);--line:rgba(255,255,255,.16);--cyan:#4de7ff;--gold:#ffd45a}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#070b18;color:var(--ink);font-family:system-ui,Segoe UI,Arial}
-#game{display:block;width:100vw;height:100vh;touch-action:none;background:#101a35}
-#hud{position:fixed;inset:12px 12px auto;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:10px}
-.pill{background:rgba(4,9,23,.72);border:1px solid var(--line);border-radius:14px;padding:8px 12px;backdrop-filter:blur(8px);font-weight:800;text-shadow:0 2px 3px #000}
-#stats{display:flex;gap:7px;flex-wrap:wrap}#bossbar{position:fixed;top:76px;left:50%;transform:translateX(-50%);width:min(420px,75vw);display:none}
-.bar{height:12px;border:1px solid #fff8;background:#1a2036;border-radius:20px;overflow:hidden}.fill{height:100%;width:100%;background:linear-gradient(90deg,#ff426f,#ffb44d)}
-#bossname{text-align:center;font-size:12px;letter-spacing:2px;font-weight:900;margin-bottom:5px;text-shadow:0 2px 3px #000}
-#overlay{position:fixed;inset:0;display:grid;place-items:center;background:linear-gradient(130deg,rgba(4,8,20,.8),rgba(9,17,40,.68));padding:18px}
-.panel{width:min(780px,96vw);max-height:92vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:clamp(18px,4vw,34px);box-shadow:0 25px 100px #0009}
-.eyebrow{color:var(--cyan);font-weight:1000;letter-spacing:4px;font-size:12px}
-h1{font-size:clamp(34px,7vw,66px);line-height:.94;margin:10px 0;background:linear-gradient(90deg,#fff,#68edff 45%,#b28aff);-webkit-background-clip:text;background-clip:text;color:transparent}
-h2{margin:0 0 8px;font-size:26px}.sub{color:var(--muted);line-height:1.5;max-width:650px}
-.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-button{border:1px solid #ffffff2c;color:white;background:#1c2a4b;padding:12px 17px;border-radius:12px;font-weight:900;font-size:14px;cursor:pointer}
-button.primary{background:linear-gradient(100deg,#00b8d8,#6756ec);border:0;box-shadow:0 8px 25px #00c5ef35}
-button:hover{filter:brightness(1.18);transform:translateY(-1px)}button:disabled{opacity:.42;cursor:not-allowed;filter:none;transform:none}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-top:16px}
-.tile{border:1px solid var(--line);background:#ffffff09;border-radius:14px;padding:12px}
-.tile b{display:block;margin-bottom:4px}.tile span{font-size:12px;color:var(--muted)}
-#mobile{position:fixed;bottom:16px;left:14px;right:14px;display:none;justify-content:space-between;align-items:end;pointer-events:none}
-.pad,.jump{display:flex;gap:9px;pointer-events:auto}.touch{width:58px;height:58px;border-radius:18px;background:#081329b8;border:1px solid #ffffff55;font-size:22px;touch-action:none;user-select:none}
-.jump .touch{width:68px;height:68px;border-radius:50%;background:#492a85c9}
-#pauseBtn{position:fixed;top:58px;left:12px;z-index:8;display:none;background:#09152be8;border:1px solid #ffffff66;padding:9px 13px;border-radius:12px;color:#fff;font-weight:900}#pauseBtn.show{display:block}
-#toast{position:fixed;top:23%;left:50%;transform:translateX(-50%);font-size:clamp(18px,3vw,28px);font-weight:1000;text-align:center;text-shadow:0 3px 8px #000;pointer-events:none;opacity:0;transition:opacity .2s}
-#help{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#d4def0a8;text-align:center;pointer-events:none}
-@media(max-width:700px){#mobile{display:flex;flex-wrap:wrap;gap:8px}#help{bottom:102px}.panel{padding:20px}#stats{max-width:60vw}#stats .pill{font-size:11px;padding:6px 8px}.touch{width:50px;height:50px}.jump .touch{width:48px;height:48px;padding:4px;font-size:18px}.pad,.jump{gap:5px}}
-</style></head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#070b18">
+<meta name="description" content="Neon Cyber Platformer — collect energy, unlock upgrades, and save Cyber City.">
+<title>Neon Cyber: Uprising</title>
+<link rel="stylesheet" href="style.css">
+</head>
 <body>
-<canvas id="game"></canvas>
-<button id="pauseBtn" aria-label="Pause game">Ⅱ PAUSE</button>
-<div id="hud"><div class="pill" id="worldLabel">RIFTBOUND</div><div id="stats"><div class="pill" id="hp">❤❤❤❤❤</div><div class="pill" id="shards">◆ 0</div><div class="pill" id="power">POWER: NONE</div><div class="pill" id="weapon">WEAPON: PULSE</div><div class="pill" id="level">LEVEL 1/40</div></div></div>
-<div id="bossbar"><div id="bossname">BOSS</div><div class="bar"><div class="fill" id="bossfill"></div></div></div>
-<div id="toast"></div><div id="help">MOVE: A/D or ←/→ · JUMP: SPACE/W/↑ · DASH: SHIFT · MELEE: J · SPECIAL: K · FIRE: F · WEAPON: Q · PAUSE: P</div>
-<div id="mobile"><div class="pad"><button class="touch" data-key="left">◀</button><button class="touch" data-key="right">▶</button></div><div class="jump"><button class="touch" data-key="dash">⚡</button><button class="touch" data-key="attack">✦</button><button class="touch" data-key="special">✧</button><button class="touch" data-key="fire">●</button><button class="touch" data-key="weapon">Z</button><button class="touch" data-key="jump">⬆</button></div></div>
-<div id="overlay"><div class="panel" id="menu">
-<div class="eyebrow">A BRAND-NEW ADVENTURE</div><h1>MOHD-MURAD-KHAN</h1>
-<p class="sub">A fractured universe. Five worlds. Five colossal guardians. Master new powers, uncover hidden routes, and fight your way to the heart of the rift.</p>
-<div class="grid">
-<div class="tile"><b>🌿 Verdant Wilds</b><span>Living vines, spring pads & thorn beasts</span></div>
-<div class="tile"><b>🔥 Ember Foundry</b><span>Lava lifts, forge drones & fire storms</span></div>
-<div class="tile"><b>🌊 Sunken Kingdom</b><span>Water currents, bubble jumps & deep-sea foes</span></div>
-<div class="tile"><b>⚡ Neon Skyline</b><span>Gravity gates, lasers & cyber hunters</span></div>
-<div class="tile"><b>🌌 The Rift Core</b><span>Shifting platforms & reality-bending bosses</span></div>
-</div>
-<div class="actions"><button class="primary" id="start">NEW GAME</button><button id="continue">CONTINUE</button><button id="shop">ARMORY / UPGRADES</button><button id="sound">SOUND: ON</button><button id="controls">HOW TO PLAY</button></div>
-<p class="sub" style="font-size:12px;margin-top:18px">40 stages · 5 boss battles · weapon arsenal · suits, upgrades, secrets and 5 hearts every level.</p>
-</div></div>
-<script>
-(()=>{
-const c=document.getElementById('game'),ctx=c.getContext('2d'),overlay=document.getElementById('overlay'),menu=document.getElementById('menu');
-let W=innerWidth,H=innerHeight,dpr=1;function resize(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;c.style.width=W+'px';c.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
-const themes=[['Verdant Wilds','#123d3c','#35c978','#8cf0a6'],['Ember Foundry','#4a1d26','#f06b3b','#ffc45b'],['Sunken Kingdom','#102e55','#28b9d3','#8af2f4'],['Neon Skyline','#20184b','#9b59ff','#54f4ff'],['The Rift Core','#25123f','#d04dff','#ffe17b']];
-const powers=[['WIND DASH','A burst that cuts through danger.'],['FLAME ORB','Launch a blazing projectile.'],['TIDAL GUARD','A shield that absorbs one hit.'],['GRAVITY FLIP','Leap higher and float briefly.'],['RIFT NOVA','Blast nearby enemies with a shockwave.']];
-const bossNames=['THORN TITAN','MAGMA COLOSSUS','ABYSSAL QUEEN','VOLT OVERLORD','THE NULL KING'];
-let level=0,world=0,cam=0,score=0,shards=0,lives=3,credits=0,paused=false,started=false,frame=0,toastTimer=0,checkpoint=0,projectiles=[],particles=[],enemies=[],platforms=[],items=[],hazards=[],boss=null,exitX=0,keys={},touch={},player;
-const weapons=[{name:'PULSE BLASTER',damage:2,speed:10,cool:18,color:'#fff19a',cost:0},{name:'PLASMA RIFLE',damage:3,speed:12,cool:14,color:'#4de7ff',cost:250},{name:'SCATTER SHOT',damage:2,speed:9,cool:28,color:'#ffbd59',cost:450},{name:'ROCKET LAUNCHER',damage:7,speed:7,cool:42,color:'#ff6b7d',cost:700},{name:'NOVA BEAM',damage:10,speed:15,cool:55,color:'#d9a0ff',cost:1000}];
-let unlockedWeapons=[0],selectedWeapon=0,suit=0,ownedSuits=[0],upgrades={health:0,damage:0,speed:0},fireCooldown=0,audioOn=true,audioCtx=null,musicGain=null;
-const suitNames=['CYAN RUNNER','VOLT ARMOR','EMBER GUARD','VOID STALKER'];const suitColors=['#4de7ff','#ffe16b','#ff805e','#c28aff'];
-function sound(freq=440,duration=.07,type='sine',volume=.035){if(!audioOn)return;try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.value=volume;o.connect(g);g.connect(audioCtx.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);o.stop(audioCtx.currentTime+duration)}catch(e){}}
-function startMusic(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();if(musicGain)return;let a=audioCtx.createOscillator(),b=audioCtx.createOscillator();musicGain=audioCtx.createGain();a.type='triangle';b.type='sine';a.frequency.value=55;b.frequency.value=82.4;musicGain.gain.value=audioOn?.012:0;a.connect(musicGain);b.connect(musicGain);musicGain.connect(audioCtx.destination);a.start();b.start()}catch(e){}}
-function cycleWeapon(){let choices=unlockedWeapons;selectedWeapon=choices[(choices.indexOf(selectedWeapon)+1)%choices.length];say('EQUIPPED: '+weapons[selectedWeapon].name);updateHud();sound(620,.09,'triangle')}
-function fireWeapon(){if(!started||paused||fireCooldown>0)return;let w=weapons[selectedWeapon];fireCooldown=w.cool;let dirs=selectedWeapon===2?[-.18,0,.18]:[0];for(let a of dirs)projectiles.push({x:player.x+player.w/2,y:player.y+20,vx:Math.cos(a)*player.face*w.speed,vy:Math.sin(a)*w.speed,life:100,damage:w.damage,color:w.color});sound(selectedWeapon===3?110:520,.08,selectedWeapon===3?'sawtooth':'square')}
-function unlockWeapon(id){if(!unlockedWeapons.includes(id)){unlockedWeapons.push(id);credits+=120;say('NEW WEAPON: '+weapons[id].name+' · BONUS 120 CREDITS');}selectedWeapon=id;}
-const saved=()=>{try{localStorage.setItem('riftbound-save',JSON.stringify({level,score,shards,lives,credits,unlockedWeapons,selectedWeapon,suit,ownedSuits,upgrades}))}catch(e){}};
-function load(){try{return JSON.parse(localStorage.getItem('riftbound-save')||'null')}catch(e){return null}}
-function startNewGame(){const old=load();if(old&&!confirm('Start a NEW GAME? Your saved progress will be replaced. Choose Cancel to keep it.'))return;fresh();overlay.style.display='none';started=true;paused=false;document.getElementById('pauseBtn').classList.add('show');startMusic()}
-function continueGame(){const s=load();if(!s){alert('There is no saved game yet. Choose NEW GAME to begin!');return}level=Math.max(0,Math.min(39,Number(s.level)||0));score=Number(s.score)||0;shards=Number(s.shards)||0;lives=Math.max(1,Number(s.lives)||3);credits=Number(s.credits)||0;unlockedWeapons=Array.isArray(s.unlockedWeapons)?s.unlockedWeapons:[0];selectedWeapon=unlockedWeapons.includes(s.selectedWeapon)?s.selectedWeapon:0;suit=Number(s.suit)||0;ownedSuits=Array.isArray(s.ownedSuits)?s.ownedSuits:[0];upgrades=s.upgrades||{health:0,damage:0,speed:0};beginLevel();overlay.style.display='none';started=true;paused=false;document.getElementById('pauseBtn').classList.add('show');startMusic()}
-function say(s){let t=document.getElementById('toast');t.textContent=s;t.style.opacity=1;toastTimer=100}
-function fresh(){level=0;score=0;shards=0;lives=3;credits=0;unlockedWeapons=[0];selectedWeapon=0;suit=0;ownedSuits=[0];upgrades={health:0,damage:0,speed:0};checkpoint=0;beginLevel()}
-function beginLevel(){world=Math.min(4,Math.floor(level/8));let stage=level%8;cam=0;frame=0;projectiles=[];particles=[];enemies=[];items=[];boss=null;paused=false;
-let width=2500+stage*190+(level%3)*130;exitX=width-120;hazards=[];platforms=[{x:0,y:H-65,w:width,h:100,type:'ground'}];
-for(let i=0;i<Math.floor(width/240);i++){let x=230+i*240+Math.sin(i*2+level)*35,y=H-145-(i%3)*47;platforms.push({x,y,w:110+(i%2)*30,h:18,type:'platform'});if(i%2===0)items.push({x:x+48,y:y-35,type:'shard',got:false});}
-for(let i=0;i<8+stage+(level%4);i++){let x=360+i*205+Math.random()*80;let kind=(i+level)%4;enemies.push({x,y:H-100,hp:2+world+Math.floor(level/10),type:kind,dir:Math.random()<.5?-1:1,alive:true,base:x,phase:Math.random()*6});}
-for(let i=0;i<5+world;i++){let hx=520+i*390+(level%2)*80;hazards.push({x:hx,y:H-72,w:42+world*4,h:22,type:(i+level)%3,phase:i*1.7});}
-if(level%4===2){platforms.push({x:width*.42,y:H-250,w:150,h:16,type:'moving',baseY:H-250,phase:level});items.push({x:width*.46,y:H-285,type:'gem',got:false});}
-if(stage===7){boss={x:width-420,y:H-180,hp:48+world*22,max:48+world*22,phase:0,hit:0,attack:0,phase2:false};}
-for(let i=0;i<3;i++)items.push({x:650+i*570,y:H-110,type:'coin',got:false});
-if(stage===1||stage===3)items.push({x:width*.55,y:H-210,type:'power',got:false});
-player={x:70,y:H-150,vx:0,vy:0,w:32,h:46,hp:5,maxHp:5,ground:false,face:1,power:Math.max(0,world-1),powerTime:0,invul:0,dash:0,attack:0,special:0,respawn:70};player.hp=5;fireCooldown=0;
-document.getElementById('worldLabel').textContent=themes[world][0].toUpperCase();document.getElementById('level').textContent=`LEVEL ${level+1}/40`;document.getElementById('bossbar').style.display=boss?'block':'none';updateHud();saved();}
-function updateHud(){document.getElementById('hp').textContent='❤'.repeat(Math.max(0,player?.hp||0))+'♡'.repeat(Math.max(0,5-(player?.hp||0)));document.getElementById('shards').textContent='◆ '+shards;document.getElementById('power').textContent='POWER: '+(player&&player.power>=0?powers[player.power][0]:'NONE');document.getElementById('weapon').textContent='WEAPON: '+weapons[selectedWeapon].name+' · '+credits+'¢';}
-function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
-function circle(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
-function burst(x,y,color,n=10){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*7,vy:(Math.random()-.7)*7,life:30,color})}
-function hit(){if(player.invul>0)return;player.hp--;player.invul=90;player.vy=-7;sound(95,.18,'sawtooth');burst(player.x+16,player.y+20,'#ff5777',15);updateHud();if(player.hp<=0){lives--;if(lives<=0){gameOver()}else{player.hp=5;player.maxHp=5;player.x=70;player.y=H-180;player.vx=player.vy=0;say('TRY AGAIN · '+lives+' LIVES LEFT')}}}
-function gameOver(){paused=true;overlay.style.display='grid';menu.innerHTML='<div class="eyebrow">THE RIFT STILL WAITS</div><h1>RUN ENDED</h1><p class="sub">You collected '+shards+' rift shards and reached stage '+(level+1)+'. Take a breath and jump back in.</p><div class="actions"><button class="primary" id="retry">RESTART RUN</button><button id="home">MAIN MENU</button></div>';document.getElementById('retry').onclick=()=>{fresh();overlay.style.display='none';paused=false};document.getElementById('home').onclick=showMenu}
-function openArmory(){menu.innerHTML='<div class="eyebrow">RIFT TECHNOLOGY</div><h2>ARMORY & UPGRADE LAB</h2><p class="sub">Credits: '+credits+' · Buy weapons, suits and permanent upgrades. Purchases are saved on this device.</p><div class="grid">'+weapons.map((w,i)=>'<div class="tile"><b>'+w.name+'</b><span>Damage '+w.damage+' · '+(unlockedWeapons.includes(i)?'OWNED':'Cost '+w.cost+' credits')+'</span><p><button data-buy-weapon="'+i+'" '+(unlockedWeapons.includes(i)?'disabled':'')+'> '+(unlockedWeapons.includes(i)?'UNLOCKED':'BUY')+' </button></p></div>').join('')+suitNames.map((n,i)=>'<div class="tile"><b>'+n+'</b><span>Armour colour suit · '+(ownedSuits.includes(i)?'OWNED':'Cost '+(180+i*120)+' credits')+'</span><p><button data-buy-suit="'+i+'">'+(ownedSuits.includes(i)?(suit===i?'EQUIPPED':'EQUIP'):'BUY')+'</button></p></div>').join('')+'<div class="tile"><b>HEART RECOVERY</b><span>Power cores restore an extra heart · Level '+(upgrades.health||0)+'</span><button data-upgrade="health">UPGRADE · '+(250+(upgrades.health||0)*250)+'¢</button></div><div class="tile"><b>WEAPON DAMAGE</b><span>Increase melee damage · Level '+(upgrades.damage||0)+'</span><button data-upgrade="damage">UPGRADE · '+(300+(upgrades.damage||0)*300)+'¢</button></div><div class="tile"><b>RUN SPEED</b><span>Faster movement · Level '+(upgrades.speed||0)+'</span><button data-upgrade="speed">UPGRADE · '+(200+(upgrades.speed||0)*200)+'¢</button></div></div><div class="actions"><button class="primary" id="armory-back">BACK TO MENU</button></div>';menu.querySelectorAll('[data-buy-weapon]').forEach(b=>b.onclick=()=>{let i=+b.dataset.buyWeapon,w=weapons[i];if(credits>=w.cost){credits-=w.cost;unlockedWeapons.push(i);selectedWeapon=i;saved();openArmory()}else say('NOT ENOUGH CREDITS')});menu.querySelectorAll('[data-buy-suit]').forEach(b=>b.onclick=()=>{let i=+b.dataset.buySuit,cost=180+i*120;if(ownedSuits.includes(i)){suit=i;saved();openArmory()}else if(credits>=cost){credits-=cost;ownedSuits.push(i);suit=i;saved();openArmory()}else say('NOT ENOUGH CREDITS')});menu.querySelectorAll('[data-upgrade]').forEach(b=>b.onclick=()=>{let k=b.dataset.upgrade,cost=({health:250,damage:300,speed:200}[k])+(upgrades[k]||0)*({health:250,damage:300,speed:200}[k]);if(credits>=cost){credits-=cost;upgrades[k]=(upgrades[k]||0)+1;saved();openArmory()}else say('NOT ENOUGH CREDITS')});document.getElementById('armory-back').onclick=showMenu}
-function pauseMenu(){if(!started)return;paused=true;saved();overlay.style.display='grid';menu.innerHTML='<div class="eyebrow">GAME PAUSED</div><h1>PAUSED</h1><p class="sub">Level '+(level+1)+' · Score '+score+' · Credits '+credits+'</p><div class="actions"><button class="primary" id="resume">RESUME</button><button id="pause-sound">SOUND: '+(audioOn?'ON':'OFF')+'</button><button id="pause-home">MAIN MENU</button></div>';document.getElementById('resume').onclick=()=>{overlay.style.display='none';paused=false};document.getElementById('pause-sound').onclick=()=>{audioOn=!audioOn;if(musicGain)musicGain.gain.value=audioOn?.012:0;pauseMenu()};document.getElementById('pause-home').onclick=()=>{paused=true;showMenu()}}
-function showMenu(){overlay.style.display='grid';menu.innerHTML='<div class="eyebrow">A BRAND-NEW ADVENTURE</div><h1>MOHD-MURAD-KHAN</h1><p class="sub">Forty stages across five worlds. Find secret routes, build your arsenal, customize your suit and defeat five evolving guardians.</p><div class="actions"><button class="primary" id="start">NEW GAME</button><button id="continue">CONTINUE</button><button id="shop">ARMORY / UPGRADES</button><button id="sound">SOUND: '+(audioOn?'ON':'OFF')+'</button><button id="controls">HOW TO PLAY</button></div><p class="sub" style="font-size:12px">40 stages · 5 worlds · 5 multi-phase bosses · weapons · suits · upgrades · offline saves · no external game assets.</p>';document.getElementById('start').onclick=startNewGame;document.getElementById('continue').onclick=continueGame;document.getElementById('continue').disabled=!load();document.getElementById('shop').onclick=openArmory;document.getElementById('sound').onclick=()=>{audioOn=!audioOn;if(musicGain)musicGain.gain.value=audioOn?.012:0;showMenu()};document.getElementById('controls').onclick=()=>{menu.innerHTML='<h2>HOW TO PLAY</h2><p class="sub">Move with A/D or arrows. Jump with SPACE, W or ↑. Press SHIFT to dash, J for melee, F to fire your selected weapon, Q to switch weapons and K for your special power. On phones, use the on-screen buttons. Collect rift shards, grab power cores, defeat the guardian at the end of each world, then enter the portal.</p><div class="actions"><button class="primary" id="back">GOT IT</button></div>';document.getElementById('back').onclick=showMenu}}
-function action(k){if(!started||paused)return;if(k==='jump'&&player.ground){player.vy=-13.5;player.ground=false;sound(380,.07,'sine');burst(player.x+16,player.y+45,'#d9faff',4)}if(k==='dash'&&player.dash<=0){player.dash=13;player.vx=player.face*15;burst(player.x+16,player.y+20,themes[world][3],9)}if(k==='attack'&&player.attack<=0){player.attack=18;if(player.power===1||player.power===4){projectiles.push({x:player.x+player.w/2,y:player.y+20,vx:player.face*9,life:75,power:player.power})}else{enemies.forEach(e=>{if(e.alive&&Math.abs(e.x-player.x)<75&&Math.abs(e.y-player.y)<80){e.hp-=2+upgrades.damage;burst(e.x,e.y,'#fff',7);sound(260,.04,'square');if(e.hp<=0){e.alive=false;score+=100}}});if(boss&&Math.abs(boss.x-player.x)<100&&Math.abs(boss.y-player.y)<100){boss.hp-=2+upgrades.damage;boss.hit=12;sound(180,.06,'sawtooth')}}}if(k==='special'&&player.special<=0){player.special=240;let radius=world===4?250:145;enemies.forEach(e=>{if(e.alive&&Math.abs(e.x-player.x)<radius){e.hp-=4;if(e.hp<=0)e.alive=false}});if(boss&&Math.abs(boss.x-player.x)<radius)boss.hp-=world===4?5:3;burst(player.x+16,player.y+20,themes[world][3],35);say(powers[world][0]+'!')}}
-addEventListener('keydown',e=>{let k=e.key.toLowerCase();keys[k]=true;if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(k))e.preventDefault();if(k===' '||k==='w'||k==='arrowup')action('jump');if(k==='shift')action('dash');if(k==='j')action('attack');if(k==='k')action('special');if(k==='f')fireWeapon();if(k==='q')cycleWeapon();if(k==='p'){paused=!paused;say(paused?'PAUSED':'RESUMED')}});
-addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-document.getElementById('pauseBtn').onclick=pauseMenu;
-addEventListener('blur',()=>{if(started&&!paused)pauseMenu()});
-document.querySelectorAll('[data-key]').forEach(b=>{let k=b.dataset.key;b.addEventListener('pointerdown',e=>{e.preventDefault();touch[k]=true;if(['jump','dash','attack','special'].includes(k))action(k);if(k==='fire')fireWeapon();if(k==='weapon')cycleWeapon()});['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,()=>touch[k]=false))});
-function update(){if(!started||paused)return;frame++;if(fireCooldown>0)fireCooldown--;let left=keys.a||keys.arrowleft||touch.left,right=keys.d||keys.arrowright||touch.right;if(player.dash<=0){if(left){player.vx-=.8;player.face=-1}if(right){player.vx+=.8;player.face=1}player.vx*=.82;player.vx=Math.max(-5.2-upgrades.speed*.45,Math.min(5.2+upgrades.speed*.45,player.vx))}else player.dash--;
-player.vy+=.62;if(player.power===3&&player.powerTime>0)player.vy*=.94;player.x+=player.vx;player.y+=player.vy;player.ground=false;
-for(let p of platforms){if(p.type==='moving'){p.y=p.baseY+Math.sin(frame*.035+p.phase)*38;}if(player.x+player.w>p.x&&player.x<p.x+p.w&&player.y+player.h>=p.y&&player.y+player.h<=p.y+Math.max(18,player.vy+5)&&player.vy>=0){player.y=p.y-player.h;player.vy=0;player.ground=true}}
-if(player.x<0)player.x=0;if(player.y>H+120){hit();player.x=Math.max(70,player.x-100);player.y=H-220;player.vy=0}
-if(player.invul>0)player.invul--;if(player.powerTime>0)player.powerTime--;if(player.attack>0)player.attack--;if(player.special>0)player.special--;
-for(let e of enemies){if(!e.alive)continue;e.x+=e.dir*(1.05+world*.22+(e.type===2?.65:0));if(e.type===1)e.y=H-100+Math.sin(frame*.07+e.phase)*24;else e.y=H-100;if(e.type===3&&Math.abs(player.x-e.x)<260&&frame%95===0){let dx=player.x-e.x,dy=player.y-e.y,m=Math.hypot(dx,dy)||1;projectiles.push({x:e.x,y:e.y,vx:dx/m*3.5,vy:dy/m*3.5,life:100,enemy:true})}if(Math.abs(e.x-e.base)>85)e.dir*=-1;if(Math.abs(player.x-e.x)<28&&Math.abs(player.y-e.y)<42){if(player.vy>2&&player.y+player.h<e.y+22){e.hp-=2;player.vy=-8;if(e.hp<=0){e.alive=false;score+=100}}else hit()}}
-for(let h of hazards){h.phase+=.025;let hy=h.y+(h.type===1?Math.sin(h.phase)*12:0);if(player.x+player.w>h.x&&player.x<h.x+h.w&&player.y+player.h>hy&&player.y<hy+h.h)hit()}
-for(let it of items){if(it.got)continue;if(Math.abs(player.x+16-it.x)<25&&Math.abs(player.y+22-it.y)<35){it.got=true;if(it.type==='shard'){shards++;credits+=5;score+=25;burst(it.x,it.y,'#ffe36e',8)}else if(it.type==='coin'){credits+=25;score+=50;burst(it.x,it.y,'#ffd45a',8)}else if(it.type==='gem'){credits+=100;score+=250;say('SECRET GEM +100 CREDITS')}else{player.power=world;player.powerTime=9999;player.hp=Math.min(5,player.hp+1+(upgrades.health>0?1:0));say('POWER UNLOCKED: '+powers[world][0]);burst(it.x,it.y,themes[world][3],20)}updateHud()}}
-// Only the player's friendly shots can damage enemies or the boss.
-for(let p of projectiles){
- if(p.enemy) continue;
- p.x+=p.vx;p.life--;
- for(let e of enemies)if(e.alive&&Math.abs(e.x-p.x)<28){e.hp-=p.damage||2;p.life=0;if(e.hp<=0){e.alive=false;score+=100;credits+=15;sound(760,.05,'triangle')}}
- if(boss&&Math.abs(boss.x-p.x)<55&&Math.abs((boss.y+45)-p.y)<90){boss.hp-=p.damage||2;p.life=0;burst(p.x,p.y,p.color||'#fff19a',7);sound(210,.04,'triangle')}
-}
-projectiles=projectiles.filter(p=>p.life>0);
-if(boss){
- boss.attack++;
- boss.x+=Math.sin(frame*.025)*.8;
- if(!boss.phase2&&boss.hp<=boss.max*.5){boss.phase2=true;say('BOSS ENRAGED! PHASE 2');sound(75,.4,'sawtooth',.06)}
- // The guardian fires aimed shots at the player, never at itself.
- if(boss.attack%(boss.phase2?62:100)===0){
-  let dx=(player.x+player.w/2)-boss.x,dy=(player.y+player.h/2)-(boss.y+35),mag=Math.hypot(dx,dy)||1,spd=boss.phase2?5.2:4.2;
-  projectiles.push({x:boss.x,y:boss.y+35,vx:dx/mag*spd,vy:dy/mag*spd,life:110,enemy:true});
-  if(world>=2||boss.phase2){for(let spread of [-.22,.22])projectiles.push({x:boss.x,y:boss.y+35,vx:(dx/mag*Math.cos(spread)-dy/mag*Math.sin(spread))*spd,vy:(dx/mag*Math.sin(spread)+dy/mag*Math.cos(spread))*spd,life:110,enemy:true})}
-  if(boss.phase2&&boss.attack%124===0){for(let a=0;a<8;a++){let ang=a*Math.PI/4;projectiles.push({x:boss.x,y:boss.y+45,vx:Math.cos(ang)*3.2,vy:Math.sin(ang)*3.2,life:120,enemy:true})}}
-  say(boss.phase2?'ENRAGED BARRAGE! DODGE!':'GUARDIAN ATTACK! DODGE!');
- }
- if(Math.abs(player.x-boss.x)<65&&Math.abs(player.y-boss.y)<80)hit();
- document.getElementById('bossname').textContent=bossNames[world]+' · '+Math.ceil(boss.hp)+' HP';
- document.getElementById('bossfill').style.width=Math.max(0,boss.hp/boss.max*100)+'%';
- if(boss.hp<=0){boss=null;document.getElementById('bossbar').style.display='none';score+=1500;credits+=250;let reward=Math.min(4,world+1);unlockWeapon(reward);say('GUARDIAN DEFEATED! +250 CREDITS');shards+=10;updateHud();saved()}
-}
-// Enemy shots move separately and can only hit the player.
-for(let p of projectiles)if(p.enemy){
- p.x+=p.vx;p.y+=p.vy;p.life--;
- if(Math.abs(player.x+player.w/2-p.x)<25&&Math.abs(player.y+player.h/2-p.y)<35){hit();p.life=0}
-}
-projectiles=projectiles.filter(p=>p.life>0);
-for(let p of particles){p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.life--}particles=particles.filter(p=>p.life>0);
-if(player.x>exitX&&(!boss)){level++;if(level>=40){victory();return}beginLevel();say('WORLD '+(world+1)+' · STAGE '+(level+1));}
-cam=Math.max(0,Math.min(exitX-W*.65,player.x-W*.32));if(toastTimer>0){toastTimer--;if(toastTimer===0)document.getElementById('toast').style.opacity=0}if(frame%180===0)saved();updateHud()}
-function victory(){paused=true;overlay.style.display='grid';menu.innerHTML='<div class="eyebrow">THE RIFT IS STABLE</div><h1>YOU ARE THE<br>RIFTBOUND!</h1><p class="sub">You conquered all 40 stages across five worlds and defeated every guardian and brought balance back to the frontier. Final score: '+score+'. Rift shards: '+shards+'.</p><div class="actions"><button class="primary" id="again">PLAY AGAIN</button></div>';document.getElementById('again').onclick=()=>{fresh();overlay.style.display='none';paused=false;started=true}}
-function draw(){let t=themes[world],grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,t[1]);grad.addColorStop(1,'#080d20');rect(0,0,W,H,grad);
-for(let i=0;i<7;i++){let x=((i*230-cam*.22)%(W+250)+W+250)%(W+250)-100;circle(x,100+(i%3)*60,55+i%3*20,t[2]+'22')}
-ctx.save();ctx.translate(-cam,0);
-for(let p of platforms){rect(p.x,p.y,p.w,p.h,p.type==='ground'?t[2]:'#33456b');rect(p.x,p.y,p.w,5,t[3])}
-for(let it of items)if(!it.got){let color=it.type==='shard'?'#ffe36e':it.type==='coin'?'#ffd45a':t[3];circle(it.x,it.y, it.type==='power'?14:8,color);if(it.type==='power'){ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.strokeRect(it.x-10,it.y-10,20,20)}}
-for(let h of hazards){let hy=h.y+(h.type===1?Math.sin(h.phase)*12:0);rect(h.x,hy,h.w,h.h,h.type===0?'#ff496e':h.type===1?'#ff9d3d':'#bd5cff');for(let z=0;z<3;z++)circle(h.x+8+z*13,hy+3,3,'#fff4c2')}
-for(let e of enemies)if(e.alive){let ec=['#a7ef66','#ff744f','#54d9ee','#b57aff'][e.type];circle(e.x,e.y+16,e.type===2?13:17,ec);circle(e.x-6,e.y+12,3,'#101326');circle(e.x+6,e.y+12,3,'#101326');if(e.type===3){ctx.strokeStyle='#fff';ctx.strokeRect(e.x-20,e.y-7,40,4)}}
-if(boss){ctx.fillStyle=t[3];ctx.beginPath();ctx.roundRect(boss.x-42,boss.y,84,100,18);ctx.fill();rect(boss.x-27,boss.y+27,12,7,'#160f2a');rect(boss.x+15,boss.y+27,12,7,'#160f2a');rect(boss.x-20,boss.y+68,40,6,'#160f2a')}
-for(let p of projectiles){circle(p.x,p.y,p.enemy?8:7,p.enemy?'#ff5477':(p.color||'#fff19a'));if(!p.enemy){ctx.globalAlpha=.35;circle(p.x-p.vx*.7,p.y-p.vy*.7,5,p.color||'#fff19a');ctx.globalAlpha=1}}
-for(let p of particles){ctx.globalAlpha=Math.max(0,p.life/30);circle(p.x,p.y,3,p.color);ctx.globalAlpha=1}
-if(player){if(!(player.invul>0&&frame%8<4)){ctx.fillStyle='#f4f7ff';ctx.beginPath();ctx.roundRect(player.x,player.y,player.w,player.h,9);ctx.fill();rect(player.x+(player.face===1?19:6),player.y+13,7,7,'#26304f');ctx.strokeStyle=suitColors[suit]||suitColors[0];ctx.lineWidth=3;ctx.strokeRect(player.x-2,player.y-2,player.w+4,player.h+4);rect(player.x+5,player.y+34,10,12,'#26304f');rect(player.x+19,player.y+34,9,12,'#26304f');if(player.power>=0){ctx.strokeStyle=t[3];ctx.lineWidth=3;ctx.strokeRect(player.x-4,player.y-4,player.w+8,player.h+8)}if(player.attack>0){ctx.strokeStyle='#fff';ctx.lineWidth=5;ctx.beginPath();ctx.arc(player.x+16+player.face*25,player.y+24,22,-1,1);ctx.stroke()}}}
-ctx.restore();
-if(!paused&&started){rect(W-145,H-18,130,4,'#ffffff22');rect(W-145,H-18,130*Math.min(1,player.x/exitX),4,t[3])}
-requestAnimationFrame(draw)}
-function loop(){update();requestAnimationFrame(loop)}
-document.getElementById('start').onclick=startNewGame;
-document.getElementById('continue').onclick=continueGame;document.getElementById('continue').disabled=!load();document.getElementById('shop').onclick=openArmory;document.getElementById('sound').onclick=()=>{audioOn=!audioOn;if(musicGain)musicGain.gain.value=audioOn?.012:0;showMenu()};
-document.getElementById('controls').onclick=()=>{menu.innerHTML='<h2>HOW TO PLAY</h2><p class="sub">Move: A/D or arrows · Jump: Space/W/↑ · Dash: Shift · Attack: J · Special: K · Pause: P. Touch buttons work on phones and tablets. Collect shards, grab power cores, defeat each world guardian and reach the portal.</p><div class="actions"><button class="primary" id="back">GOT IT</button></div>';document.getElementById('back').onclick=showMenu};
-beginLevel();loop();draw();
-})();
-</script></body></html>
+<main class="shell">
+  <header>
+    <div class="brand">◆ NEON <b>CYBER</b><small>UPRISING</small></div>
+    <div class="hud">
+      <span>LVL <b id="levelValue">1</b>/40</span>
+      <span>ORBS <b id="orbValue">0/0</b></span>
+      <span>COINS <b id="coinValue">0</b></span>
+      <span>♥ <b id="livesValue">3</b></span>
+      <span>SCORE <b id="scoreValue">0</b></span>
+      <span>BEST <b id="bestValue">0</b></span>
+    </div>
+  </header>
+  <section class="stage">
+    <canvas id="gameCanvas" width="900" height="540" aria-label="Neon Cyber Uprising platform game"></canvas>
+    <section id="menuScreen" class="overlay">
+      <div class="panel hero">
+        <small>THE CITY NEEDS A HERO</small>
+        <h1>NEON <em>CYBER</em><br>UPRISING</h1>
+        <p>Fight through 40 sectors across four worlds. Defeat four unique bosses to earn four powerful weapons, hunt down seeker drones, and save Cyber City.</p>
+        <button id="playBtn" class="primary">START MISSION</button>
+        <div class="button-row"><button id="levelSelectBtn">CHOOSE LEVEL</button><button id="shopBtn">UPGRADE LAB</button><button id="howBtn">HOW TO PLAY</button><button id="musicBtn">MUSIC: OFF</button></div>
+        <p class="bestline">PERSONAL BEST <b id="menuBest">0</b> <span>·</span> <b id="menuCoins">0</b> CREDITS</p>
+      </div>
+    </section>
+    <section id="levelSelectScreen" class="overlay hidden"><div class="panel level-panel">
+      <small>JUMP INTO ANY SECTOR</small><h2>CHOOSE LEVEL</h2>
+      <p>Choose from 40 sectors. Boss battles await at levels 10, 20, 30 and 40.</p>
+      <div id="levelButtons" class="level-grid"></div>
+      <button id="levelSelectBackBtn" class="primary">BACK TO MENU</button>
+    </div></section>
+  <section id="pauseScreen" class="overlay hidden"><div class="panel">
+      <small>MISSION SUSPENDED</small><h2>PAUSED</h2>
+      <button id="resumeBtn" class="primary">RESUME</button>
+      <div class="button-row"><button id="restartBtn">RESTART SECTOR</button><button id="quitBtn">MAIN MENU</button></div>
+    </div></section>
+    <section id="infoScreen" class="overlay hidden"><div class="panel">
+      <small>FIELD MANUAL</small><h2>HOW TO PLAY</h2>
+      <p class="left"><b>Move:</b> A/D or ←/→<br><b>Jump:</b> W / ↑ / SPACE (double jump!)<br><b>Dash:</b> SHIFT (uses energy)<br><b>Nova Pulse:</b> E (permanently destroys nearby normal enemies for this sector)<br><b>Weapon fire:</b> F (weapons are earned from bosses); <b>Cycle weapon:</b> Z<br><b>Shield:</b> Q (temporary protection)<br><b>Overdrive:</b> G (temporary speed boost)<br><b>Pause:</b> P or ESC</p>
+      <p class="left">Collect every orb to unlock the exit. Grab credits, activate checkpoints, and use the Upgrade Lab between runs. New seeker drones appear in later sectors. Use F to shoot them or E to clear nearby threats. Press G for Overdrive. Touch controls are available on phones.</p>
+      <button id="backBtn" class="primary">BACK</button>
+    </div></section>
+    <section id="shopScreen" class="overlay hidden"><div class="panel shop-panel">
+      <small>NEON TECH DIVISION</small><h2>UPGRADE LAB</h2>
+      <p>Credits: <b id="shopCoins">0</b> · Permanent upgrades are saved on this device.</p>
+      <h3 class="suit-heading">CHOOSE YOUR SUIT</h3><div id="suitPicker" class="suit-picker"></div><div id="shopItems" class="shop-items"></div>
+      <div class="button-row"><button id="shopBackBtn" class="primary">BACK TO MENU</button><button id="resetSaveBtn">RESET SAVE</button></div>
+    </div></section>
+    <section id="endScreen" class="overlay hidden"><div class="panel">
+      <small id="endEyebrow">SECTOR CLEARED</small><h2 id="endTitle">NICE WORK!</h2>
+      <p id="endText"></p>
+      <button id="nextBtn" class="primary">NEXT SECTOR</button>
+      <button id="endMenuBtn">MAIN MENU</button>
+    </div></section>
+    <div class="touch">
+      <button id="leftBtn" aria-label="Move left">◀</button><button id="rightBtn" aria-label="Move right">▶</button>
+      <button id="dashBtn">DASH</button><button id="jumpBtn">JUMP</button><button id="attackBtn">PULSE</button><button id="fireBtn">FIRE</button><button id="weaponBtn">WEAPON</button><button id="shieldBtn">SHIELD</button><button id="boostBtn">BOOST</button><button id="pauseTouchBtn">Ⅱ</button>
+    </div>
+  </section>
+  <footer><span>MOVE · DOUBLE JUMP · DASH · PULSE · WEAPON FIRE · SHIELD</span><span>10 SECTORS · UPGRADES · CHECKPOINTS · CORE BOSS</span></footer>
+</main>
+<script src="audio.js"></script><script src="particles.js"></script><script src="game.js"></script>
+</body></html>
