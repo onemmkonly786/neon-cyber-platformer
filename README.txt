@@ -1,6 +1,6 @@
 NEON CYBER: UPRISING — MEGA UPGRADE
 
-This update is built on the existing Neon Cyber Platformer 40-level / four-boss project. It is NOT the separate MOHD-MURAD-KHAN game.
+This update is built on the existing Neon Cyber Platformer 50-level / five-boss project. It is NOT the separate MOHD-MURAD-KHAN game.
 
 Files required together:
 - index.html
@@ -16,9 +16,12 @@ New additions in this update:
 - Synthesized offline background music with a MUSIC ON/OFF toggle.
 - Mobile touch controls wrap to fit narrow screens.
 
+Difficulty adjustments: more starting lives, fewer hazards and enemies, slower enemy projectiles, easier boss fights and friendlier movement physics.
+- Main menu now has CONTINUE (saved campaign progress) and NEW GAME.
+
 Existing game content preserved:
-- 40 sectors across four world themes
-- Bosses at levels 10, 20, 30 and 40
+- 50 sectors across five world themes
+- Bosses at levels 10, 20, 30, 40 and 50
 - Four boss-earned weapons, weapon cycling, Nova Pulse, shield, dash and double jump
 - Upgrade Lab, suits, credits, checkpoints, hazards, drones, turrets, local save data
 
