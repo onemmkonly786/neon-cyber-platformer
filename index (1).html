@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#070b18">
+<meta name="description" content="Neon Cyber Platformer — collect energy, unlock upgrades, and save Cyber City.">
+<title>Neon Cyber: Uprising</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="shell">
+  <header>
+    <div class="brand">◆ NEON <b>CYBER</b><small>UPRISING</small></div>
+    <div class="hud">
+      <span>LVL <b id="levelValue">1</b>/40</span>
+      <span>ORBS <b id="orbValue">0/0</b></span>
+      <span>COINS <b id="coinValue">0</b></span>
+      <span>♥ <b id="livesValue">3</b></span>
+      <span>SCORE <b id="scoreValue">0</b></span>
+      <span>BEST <b id="bestValue">0</b></span>
+    </div>
+  </header>
+  <section class="stage">
+    <canvas id="gameCanvas" width="900" height="540" aria-label="Neon Cyber Uprising platform game"></canvas>
+    <section id="menuScreen" class="overlay">
+      <div class="panel hero">
+        <small>THE CITY NEEDS A HERO</small>
+        <h1>NEON <em>CYBER</em><br>UPRISING</h1>
+        <p>Fight through 40 sectors across four worlds. Defeat four unique bosses to earn four powerful weapons, hunt down seeker drones, and save Cyber City.</p>
+        <button id="playBtn" class="primary">START MISSION</button>
+        <div class="button-row"><button id="levelSelectBtn">CHOOSE LEVEL</button><button id="shopBtn">UPGRADE LAB</button><button id="howBtn">HOW TO PLAY</button><button id="musicBtn">MUSIC: OFF</button></div>
+        <p class="bestline">PERSONAL BEST <b id="menuBest">0</b> <span>·</span> <b id="menuCoins">0</b> CREDITS</p>
+      </div>
+    </section>
+    <section id="levelSelectScreen" class="overlay hidden"><div class="panel level-panel">
+      <small>JUMP INTO ANY SECTOR</small><h2>CHOOSE LEVEL</h2>
+      <p>Choose from 40 sectors. Boss battles await at levels 10, 20, 30 and 40.</p>
+      <div id="levelButtons" class="level-grid"></div>
+      <button id="levelSelectBackBtn" class="primary">BACK TO MENU</button>
+    </div></section>
+  <section id="pauseScreen" class="overlay hidden"><div class="panel">
+      <small>MISSION SUSPENDED</small><h2>PAUSED</h2>
+      <button id="resumeBtn" class="primary">RESUME</button>
+      <div class="button-row"><button id="restartBtn">RESTART SECTOR</button><button id="quitBtn">MAIN MENU</button></div>
+    </div></section>
+    <section id="infoScreen" class="overlay hidden"><div class="panel">
+      <small>FIELD MANUAL</small><h2>HOW TO PLAY</h2>
+      <p class="left"><b>Move:</b> A/D or ←/→<br><b>Jump:</b> W / ↑ / SPACE (double jump!)<br><b>Dash:</b> SHIFT (uses energy)<br><b>Nova Pulse:</b> E (permanently destroys nearby normal enemies for this sector)<br><b>Weapon fire:</b> F (weapons are earned from bosses); <b>Cycle weapon:</b> Z<br><b>Shield:</b> Q (temporary protection)<br><b>Overdrive:</b> G (temporary speed boost)<br><b>Pause:</b> P or ESC</p>
+      <p class="left">Collect every orb to unlock the exit. Grab credits, activate checkpoints, and use the Upgrade Lab between runs. New seeker drones appear in later sectors. Use F to shoot them or E to clear nearby threats. Press G for Overdrive. Touch controls are available on phones.</p>
+      <button id="backBtn" class="primary">BACK</button>
+    </div></section>
+    <section id="shopScreen" class="overlay hidden"><div class="panel shop-panel">
+      <small>NEON TECH DIVISION</small><h2>UPGRADE LAB</h2>
+      <p>Credits: <b id="shopCoins">0</b> · Permanent upgrades are saved on this device.</p>
+      <h3 class="suit-heading">CHOOSE YOUR SUIT</h3><div id="suitPicker" class="suit-picker"></div><div id="shopItems" class="shop-items"></div>
+      <div class="button-row"><button id="shopBackBtn" class="primary">BACK TO MENU</button><button id="resetSaveBtn">RESET SAVE</button></div>
+    </div></section>
+    <section id="endScreen" class="overlay hidden"><div class="panel">
+      <small id="endEyebrow">SECTOR CLEARED</small><h2 id="endTitle">NICE WORK!</h2>
+      <p id="endText"></p>
+      <button id="nextBtn" class="primary">NEXT SECTOR</button>
+      <button id="endMenuBtn">MAIN MENU</button>
+    </div></section>
+    <div class="touch">
+      <button id="leftBtn" aria-label="Move left">◀</button><button id="rightBtn" aria-label="Move right">▶</button>
+      <button id="dashBtn">DASH</button><button id="jumpBtn">JUMP</button><button id="attackBtn">PULSE</button><button id="fireBtn">FIRE</button><button id="weaponBtn">WEAPON</button><button id="shieldBtn">SHIELD</button><button id="boostBtn">BOOST</button><button id="pauseTouchBtn">Ⅱ</button>
+    </div>
+  </section>
+  <footer><span>MOVE · DOUBLE JUMP · DASH · PULSE · WEAPON FIRE · SHIELD</span><span>10 SECTORS · UPGRADES · CHECKPOINTS · CORE BOSS</span></footer>
+</main>
+<script src="audio.js"></script><script src="particles.js"></script><script src="game.js"></script>
+</body></html>
